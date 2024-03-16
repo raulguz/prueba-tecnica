@@ -1,0 +1,61 @@
+<header class="header-container">
+  <div class="header-wrapper">
+    <div class="logo-container">
+      <img
+        class="logo-container__logo"
+        src="/assets/images/pokemon.png"
+        alt="logo"
+      />
+    </div>
+    <ul class="desktop-menu-container">
+      <li
+        *ngFor="let menuOption of menuItems"
+        class="menu-item"
+        (click)="showMenu(menuOption)"
+        [routerLink]="menuOption.path"
+      >
+        <a
+          class="menu-item__link"
+          [routerLink]="menuOption.path"
+          routerLinkActive="active-link"
+        >
+          <div class="menu-label-container">
+            <span class="menu-label-container__label">{{
+              menuOption.label
+            }}</span>
+          </div>
+        </a>
+        <ul
+          class="inner-options"
+          *ngIf="menuOption.isSelected && menuOption.children.length > 0"
+          [@menuAnimation]
+        >
+          <li
+            class="inner-options__item"
+            *ngFor="let item of menuOption.children"
+          >
+            <a [routerLink]="item.path">{{ item.label }}</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <button class="desktop-profile-button" (click)="toggleProfileMenu()">
+      <app-icon
+        icon="menu"
+        (click)="onMobileMenuClicked()"
+        color="grey-500"
+        [dimension]="22"
+      ></app-icon>
+      <img
+        class="desktop-profile-button__avatar"
+        src="/assets/images/user-avatar.png"
+        alt="user-avatar"
+      />
+      <ul class="profile-menu-container" *ngIf="isProfileMenuVisible">
+        <li class="profile-menu-item" (click)="logout()">
+          <span class="profile-menu-item__label">Cerrar Sesión</span>
+        </li>
+      </ul>
+    </button>
+  </div>
+</header>
