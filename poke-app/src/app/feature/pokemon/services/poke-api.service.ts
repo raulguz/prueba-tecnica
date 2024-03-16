@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { IPokeApiResponse } from '../models/pokemon.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,9 @@ export class PokeApiService {
   constructor(private http: HttpClient) {}
 
   search(limit?: number) {
-    return this.http.get(`${this.url}/pokemon?limit=${limit}`);
+    return this.http.get<IPokeApiResponse>(
+      `${this.url}/pokemon?limit=${limit}`
+    );
   }
 
   getPokemon(name: string) {
