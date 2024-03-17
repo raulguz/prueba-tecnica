@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { take } from 'rxjs';
+import { MaterialSharedModule } from '../../shared/modules/material-shared/material-shared.module';
 import { PokemonEditDialogComponent } from './components/pokemon-edit-dialog/pokemon-edit-dialog.component';
 import { PokemonListComponent } from './components/pokemon-list/pokemon-list.component';
 import { IPokemon } from './models/pokemon.interface';
@@ -10,7 +11,12 @@ import { PokemonStore } from './store/pokemon.store';
 @Component({
   selector: 'app-pokemon-view',
   standalone: true,
-  imports: [PokemonListComponent, CommonModule, PokemonEditDialogComponent],
+  imports: [
+    MaterialSharedModule,
+    PokemonListComponent,
+    CommonModule,
+    PokemonEditDialogComponent,
+  ],
   templateUrl: './pokemon-view.component.html',
   styleUrl: './pokemon-view.component.scss',
   providers: [PokemonStore],
@@ -39,5 +45,20 @@ export class PokemonViewComponent implements OnInit {
         dialogRef.componentInstance.closeDialog();
       }
     });
+  }
+
+  onCreatePokemon() {
+    const dialogRef = this.dialog.open(PokemonEditDialogComponent, {
+      width: '450px',
+    });
+
+    dialogRef.componentInstance.savePokemon.subscribe((res) => {
+      this.store.createPokemon(res);
+      dialogRef.componentInstance.closeDialog();
+    });
+  }
+
+  onRestartData() {
+    this.store.fetchPokemons(150);
   }
 }

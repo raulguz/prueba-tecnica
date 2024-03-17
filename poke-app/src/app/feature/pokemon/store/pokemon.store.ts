@@ -73,6 +73,20 @@ export class PokemonStore extends ComponentStore<PokemonSate> {
     };
   });
 
+  readonly createPokemon = this.updater((state, pokemon: IPokemon) => {
+    const ids = state.pokemons.map((p) => Number(p.id));
+    pokemon.id = (Math.max(...ids) + 2001).toString();
+    const newData: IPokemon[] = [pokemon, ...state.pokemons];
+    this.localStorageService.setLocalStorage(
+      LocalStorageEntitiesEnum.POKEMON_DATA,
+      newData
+    );
+    return {
+      ...state,
+      pokemons: newData,
+    };
+  });
+
   //effects
   readonly fetchPokemons = this.effect<number>((pokemons$) => {
     return pokemons$.pipe(
@@ -94,11 +108,14 @@ export class PokemonStore extends ComponentStore<PokemonSate> {
 //functions
 const enrichPokemonData = (pokemons: IPokemon[]) => {
   return pokemons.map((pk) => {
-    const id = pk?.url?.slice(-5).replace(/[^\d.-]+/g, '');
+    const id =
+      pk.url && pk.url.length > 5
+        ? pk?.url?.slice(-5).replace(/[^\d.-]+/g, '')
+        : pk.id;
     return {
       ...pk,
       id: id,
-      imageUrl: getSpriteUrl(id ?? ''),
+      imageUrl: id && +id < 2000 ? getSpriteUrl(id ?? '') : '',
     };
   });
 };

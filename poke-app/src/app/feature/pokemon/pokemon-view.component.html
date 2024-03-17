@@ -1,6 +1,12 @@
 <ng-container *ngIf="pokemons$ | async as pk">
   <div class="pk-main-container">
     <div class="pk-content">
+      <div class="pk-actions">
+        <button mat-button (click)="onRestartData()">Reiniciar</button>
+        <button mat-button color="primary" (click)="onCreatePokemon()">
+          Crear Pokemon
+        </button>
+      </div>
       <app-pokemon-list
         [pokemons]="pk"
         (deletePokemon)="onDeletePokemon($event)"
