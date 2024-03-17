@@ -1,7 +1,10 @@
 <ng-container *ngIf="pokemons$ | async as pk">
   <div class="pk-main-container">
     <div class="pk-content">
-      <app-pokemon-list [pokemons]="pk"></app-pokemon-list>
+      <app-pokemon-list
+        [pokemons]="pk"
+        (deletePokemon)="onDeletePokemon($event)"
+      ></app-pokemon-list>
     </div>
   </div>
 </ng-container>

@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { IconComponent } from '@shared/components';
@@ -16,6 +16,8 @@ export class PokemonListComponent {
   @Input() set pokemons(val: IPokemon[]) {
     this.dataSource.data = val;
   }
+  @Output() deletePokemon = new EventEmitter<IPokemon>();
+
   displayedColumns: string[] = [
     'id',
     'name',
@@ -24,4 +26,8 @@ export class PokemonListComponent {
     'actions',
   ];
   dataSource = new MatTableDataSource<IPokemon>([]);
+
+  onDeletePokemon(item: IPokemon) {
+    this.deletePokemon.emit(item);
+  }
 }

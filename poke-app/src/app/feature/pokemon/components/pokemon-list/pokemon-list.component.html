@@ -36,7 +36,7 @@
         <button mat-button color="primary">
           <app-icon icon="edit-2" [dimension]="16"></app-icon>
         </button>
-        <button mat-button color="warn">
+        <button mat-button color="warn" (click)="onDeletePokemon(element)">
           <app-icon icon="trash-2" [dimension]="16"></app-icon>
         </button>
       </td>

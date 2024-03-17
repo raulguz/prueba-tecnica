@@ -49,6 +49,18 @@ export class PokemonStore extends ComponentStore<PokemonSate> {
     }
   });
 
+  readonly deletePokemon = this.updater((state, pokemon: IPokemon) => {
+    const data = [...removePokemon(state.pokemons, pokemon)];
+    this.localStorageService.setLocalStorage(
+      LocalStorageEntitiesEnum.POKEMON_DATA,
+      data
+    );
+    return {
+      ...state,
+      pokemons: data,
+    };
+  });
+
   //effects
   readonly fetchPokemons = this.effect<number>((pokemons$) => {
     return pokemons$.pipe(
@@ -67,6 +79,7 @@ export class PokemonStore extends ComponentStore<PokemonSate> {
   });
 }
 
+//functions
 const enrichPokemonData = (pokemons: IPokemon[]) => {
   return pokemons.map((pk) => {
     const id = pk.url.slice(-5).replace(/[^\d.-]+/g, '');
@@ -80,4 +93,10 @@ const enrichPokemonData = (pokemons: IPokemon[]) => {
 
 const getSpriteUrl = (id: string) => {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${id}.png`;
+};
+
+const removePokemon = (data: IPokemon[], item: IPokemon) => {
+  const index = data.indexOf(item);
+  data.splice(index, 1);
+  return data;
 };
