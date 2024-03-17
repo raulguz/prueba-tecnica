@@ -1,0 +1,39 @@
+.pk-dialog {
+  &-container {
+    padding: 24px;
+  }
+
+  &-header {
+    &-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &__icon {
+        cursor: pointer;
+      }
+    }
+    &__title {
+      margin-top: 16px;
+      font-size: 20px;
+    }
+  }
+
+  &-body {
+    margin-top: 16px;
+  }
+
+  &-actions {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 8px;
+    &__btn {
+      width: fit-content;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}

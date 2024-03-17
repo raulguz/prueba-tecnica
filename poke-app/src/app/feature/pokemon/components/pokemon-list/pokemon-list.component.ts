@@ -17,6 +17,7 @@ export class PokemonListComponent {
     this.dataSource.data = val;
   }
   @Output() deletePokemon = new EventEmitter<IPokemon>();
+  @Output() editPokemon = new EventEmitter<IPokemon>();
 
   displayedColumns: string[] = [
     'id',
@@ -29,5 +30,9 @@ export class PokemonListComponent {
 
   onDeletePokemon(item: IPokemon) {
     this.deletePokemon.emit(item);
+  }
+
+  onEditPokemon(item: IPokemon) {
+    this.editPokemon.emit(item);
   }
 }

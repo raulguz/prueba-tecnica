@@ -1,0 +1,40 @@
+<div class="pk-dialog-container">
+  <div class="pk-dialog-header">
+    <div class="pk-dialog-header-buttons">
+      <app-icon icon="edit" [dimension]="20"></app-icon>
+      <app-icon
+        icon="x"
+        [dimension]="20"
+        class="pk-dialog-header-buttons__icon"
+        (click)="closeDialog()"
+      ></app-icon>
+    </div>
+    <div class="pk-dialog-header__title">Edita tu Pokemon</div>
+  </div>
+  <div class="pk-dialog-body">
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" />
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="pk-dialog-actions">
+    <button mat-button class="pk-dialog-actions__btn" (click)="closeDialog()">
+      <span>Cancelar</span>
+    </button>
+    <button
+      mat-button
+      color="primary"
+      class="pk-dialog-actions__btn"
+      [disabled]="form.invalid"
+      (click)="onSavePokemon()"
+    >
+      <span>Guardar</span>
+    </button>
+  </div>
+</div>

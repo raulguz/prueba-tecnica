@@ -1,8 +1,9 @@
 export interface IPokemon {
-  id: string;
+  id?: string;
   name: string;
-  url: string;
-  imageUrl: string;
+  url?: string;
+  imageUrl?: string;
+  description?: string;
 }
 
 export interface IPokeApiResponse {

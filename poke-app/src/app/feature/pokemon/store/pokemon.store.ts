@@ -61,6 +61,18 @@ export class PokemonStore extends ComponentStore<PokemonSate> {
     };
   });
 
+  readonly editPokemon = this.updater((state, pokemon: IPokemon) => {
+    const data = [...findAndEditPokemon(state.pokemons, pokemon)];
+    this.localStorageService.setLocalStorage(
+      LocalStorageEntitiesEnum.POKEMON_DATA,
+      data
+    );
+    return {
+      ...state,
+      pokemons: data,
+    };
+  });
+
   //effects
   readonly fetchPokemons = this.effect<number>((pokemons$) => {
     return pokemons$.pipe(
@@ -82,17 +94,24 @@ export class PokemonStore extends ComponentStore<PokemonSate> {
 //functions
 const enrichPokemonData = (pokemons: IPokemon[]) => {
   return pokemons.map((pk) => {
-    const id = pk.url.slice(-5).replace(/[^\d.-]+/g, '');
+    const id = pk?.url?.slice(-5).replace(/[^\d.-]+/g, '');
     return {
       ...pk,
       id: id,
-      imageUrl: getSpriteUrl(id),
+      imageUrl: getSpriteUrl(id ?? ''),
     };
   });
 };
 
 const getSpriteUrl = (id: string) => {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${id}.png`;
+};
+
+const findAndEditPokemon = (data: IPokemon[], item: IPokemon) => {
+  const index = data.findIndex((i) => i.id === item.id);
+  data[index].name = item.name;
+  data[index].description = item.description;
+  return data;
 };
 
 const removePokemon = (data: IPokemon[], item: IPokemon) => {
