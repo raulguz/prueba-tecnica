@@ -1,3 +1,7 @@
-<div class="pk-main-container">
-  <div class="pk-content">test</div>
-</div>
+<ng-container *ngIf="pokemons$ | async as pk">
+  <div class="pk-main-container">
+    <div class="pk-content">
+      <app-pokemon-list [pokemons]="pk"></app-pokemon-list>
+    </div>
+  </div>
+</ng-container>

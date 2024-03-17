@@ -24,7 +24,14 @@ export class PokemonStore extends ComponentStore<PokemonSate> {
   //updaters
   readonly loadPokemons = this.updater((state, pokemos: IPokemon[]) => ({
     ...state,
-    pokemons: pokemos,
+    pokemons: pokemos.map((pk) => {
+      const id = pk.url.slice(-5).replace(/[^\d.-]+/g, '');
+      return {
+        ...pk,
+        id: id,
+        imageUrl: getSpriteUrl(id),
+      };
+    }),
   }));
 
   //effects
@@ -38,3 +45,7 @@ export class PokemonStore extends ComponentStore<PokemonSate> {
     );
   });
 }
+
+const getSpriteUrl = (id: string) => {
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${id}.png`;
+};
