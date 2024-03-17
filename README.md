@@ -2,7 +2,7 @@
 
 Tecnologias implementadas:
 - Angular 17
-- Angular Material 16
+- Angular Material 17
 - NgRx Component Store para el manejo de selectors, effects, updates
 - API: Llamadas API a https://pokeapi.co/
 - RxJs
