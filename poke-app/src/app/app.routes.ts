@@ -5,7 +5,7 @@ export const routes: Routes = [
   { path: '**', redirectTo: 'pokemon-lis', pathMatch: 'full' },
   {
     path: 'pokemon-list',
-    title: 'LogIn Page',
+    title: 'Pokemon',
     component: PokemonViewComponent,
   },
 ];
