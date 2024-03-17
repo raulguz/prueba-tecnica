@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs';
 import { PokemonListComponent } from './components/pokemon-list/pokemon-list.component';
 import { PokemonStore } from './store/pokemon.store';
 
@@ -17,6 +18,6 @@ export class PokemonViewComponent implements OnInit {
   constructor(private readonly store: PokemonStore) {}
 
   ngOnInit(): void {
-    this.store.fetchPokemons(150);
+    this.store.loadFromLocalStore();
   }
 }

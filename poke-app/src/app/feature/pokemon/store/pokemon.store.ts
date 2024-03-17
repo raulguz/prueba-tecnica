@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
+import { LocalStorageEntitiesEnum, LocalStorageService } from '@shared/modules';
 import { switchMap, tap } from 'rxjs';
 import { IPokemon } from '../models/pokemon.interface';
 import { PokeApiService } from '../services/poke-api.service';
@@ -14,7 +15,10 @@ const defaultState: PokemonSate = {
 
 @Injectable()
 export class PokemonStore extends ComponentStore<PokemonSate> {
-  constructor(private pokemonApiService: PokeApiService) {
+  constructor(
+    private pokemonApiService: PokeApiService,
+    private localStorageService: LocalStorageService
+  ) {
     super(defaultState);
   }
 
@@ -22,29 +26,57 @@ export class PokemonStore extends ComponentStore<PokemonSate> {
   readonly pokemons$ = this.select(({ pokemons }) => pokemons);
 
   //updaters
-  readonly loadPokemons = this.updater((state, pokemos: IPokemon[]) => ({
+  readonly loadPokemons = this.updater((state, pokemons: IPokemon[]) => ({
     ...state,
-    pokemons: pokemos.map((pk) => {
-      const id = pk.url.slice(-5).replace(/[^\d.-]+/g, '');
-      return {
-        ...pk,
-        id: id,
-        imageUrl: getSpriteUrl(id),
-      };
-    }),
+    pokemons: enrichPokemonData(pokemons),
   }));
+
+  readonly loadFromLocalStore = this.updater<void>((state) => {
+    const pokemons = enrichPokemonData(
+      this.localStorageService.getLocalStorage(
+        LocalStorageEntitiesEnum.POKEMON_DATA
+      )
+    );
+
+    if (pokemons.length > 0) {
+      return {
+        ...state,
+        pokemons: pokemons,
+      };
+    } else {
+      this.fetchPokemons(150);
+      return state;
+    }
+  });
 
   //effects
   readonly fetchPokemons = this.effect<number>((pokemons$) => {
     return pokemons$.pipe(
       switchMap((limit) =>
-        this.pokemonApiService
-          .search(limit)
-          .pipe(tap(({ results }) => this.loadPokemons(results)))
+        this.pokemonApiService.search(limit).pipe(
+          tap(({ results }) => {
+            this.loadPokemons(results);
+            this.localStorageService.setLocalStorage(
+              LocalStorageEntitiesEnum.POKEMON_DATA,
+              results
+            );
+          })
+        )
       )
     );
   });
 }
+
+const enrichPokemonData = (pokemons: IPokemon[]) => {
+  return pokemons.map((pk) => {
+    const id = pk.url.slice(-5).replace(/[^\d.-]+/g, '');
+    return {
+      ...pk,
+      id: id,
+      imageUrl: getSpriteUrl(id),
+    };
+  });
+};
 
 const getSpriteUrl = (id: string) => {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${id}.png`;
