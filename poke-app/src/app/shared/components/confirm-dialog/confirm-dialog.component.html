@@ -1,0 +1,29 @@
+<div class="pk-dialog-container">
+  <div class="pk-dialog-header">
+    <div class="pk-dialog-header-buttons">
+      <app-icon icon="alert" [dimension]="20"></app-icon>
+      <app-icon
+        icon="x"
+        [dimension]="20"
+        class="pk-dialog-header-buttons__icon"
+        (click)="closeDialog()"
+      ></app-icon>
+    </div>
+    <div class="pk-dialog-header__title">{{ data.title }}</div>
+    <div class="pk-dialog-header__sub-title">{{ data.subTitle }}</div>
+  </div>
+  <div class="pk-dialog-body"></div>
+  <div class="pk-dialog-actions">
+    <button mat-button class="pk-dialog-actions__btn" (click)="closeDialog()">
+      Cancelar
+    </button>
+    <button
+      mat-button
+      color="primary"
+      class="pk-dialog-actions__btn"
+      (click)="onConfirm()"
+    >
+      Confirmar
+    </button>
+  </div>
+</div>

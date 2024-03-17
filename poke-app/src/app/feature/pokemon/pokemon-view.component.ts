@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '@shared/components';
 import { take } from 'rxjs';
 import { MaterialSharedModule } from '../../shared/modules/material-shared/material-shared.module';
 import { PokemonEditDialogComponent } from './components/pokemon-edit-dialog/pokemon-edit-dialog.component';
@@ -16,6 +17,7 @@ import { PokemonStore } from './store/pokemon.store';
     PokemonListComponent,
     CommonModule,
     PokemonEditDialogComponent,
+    ConfirmDialogComponent,
   ],
   templateUrl: './pokemon-view.component.html',
   styleUrl: './pokemon-view.component.scss',
@@ -31,7 +33,18 @@ export class PokemonViewComponent implements OnInit {
   }
 
   onDeletePokemon(item: IPokemon): void {
-    this.store.deletePokemon(item);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '450px',
+      data: {
+        title: `Desea eliminar el pokemon ${item.name}?`,
+        subTitle: 'Esta accion es permanente',
+      },
+    });
+
+    dialogRef.componentInstance.confirmAction.subscribe((res) => {
+      this.store.deletePokemon(item);
+      dialogRef.componentInstance.closeDialog();
+    });
   }
   onEditPokemon(item: IPokemon): void {
     const dialogRef = this.dialog.open(PokemonEditDialogComponent, {
@@ -59,6 +72,17 @@ export class PokemonViewComponent implements OnInit {
   }
 
   onRestartData() {
-    this.store.fetchPokemons(150);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '450px',
+      data: {
+        title: 'Desea reiniciar los datos?',
+        subTitle: 'Todos los datos guardados se perderan',
+      },
+    });
+
+    dialogRef.componentInstance.confirmAction.subscribe((res) => {
+      this.store.fetchPokemons(150);
+      dialogRef.componentInstance.closeDialog();
+    });
   }
 }
