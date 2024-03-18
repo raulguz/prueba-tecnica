@@ -37,7 +37,7 @@ export class PokemonViewComponent implements OnInit {
       width: '450px',
       data: {
         title: `Desea eliminar el pokemon ${item.name}?`,
-        subTitle: 'Esta accion es permanente',
+        subTitle: ' ',
       },
     });
 
